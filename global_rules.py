@@ -7,7 +7,7 @@ def run(data, bot_info, send):
         return True
     
     if message == 'fuck you dan':
-        send('kys dan')
+        send('kys dan', bot_info[0])
         return True
     
     return True
