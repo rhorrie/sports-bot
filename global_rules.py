@@ -34,7 +34,7 @@ def run(data, bot_info, send):
 				if game_stats[i][1] == 'Overall':
 					for f in range(i+1, games):
 						schools = schools + (game_stats[f][1]) + ', '
-					career_stats = '{0} Stats\nSchool(s) {1}\nGames {2}\n{3} MPG\n{10} PPG\n{4} FG%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG'.format(game_stats[i][0], schools, game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9])
+					career_stats = '{0} Stats\nSchool(s) {1}\nGames {2}\n{3} MPG\n{10} PPG\n{4} FG%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG'.format(game_stats[i][0], schools, game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10])
 					send(career_stats, bot_info[0])
 				if game_stats[i][1] != 'Overall':
 					career_stats = '{0} Stats\nSchool(s) {1}\nGames {2}\n{3} MPG\n{10} PPG\n{4} FG%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG'.format(game_stats[i][0], game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10])
