@@ -50,7 +50,7 @@ def run(data, bot_info, send):
 		count = len(text_split[4])
 		
 		if count <= 5:
-			url = 'https://www.basketball-reference.com/players/'+text_split[4][0] + '/' + text_split[4] + text_split[3][0] + text_split[3][1] + '01.html
+			url = 'https://www.basketball-reference.com/players/'+text_split[4][0] + '/' + text_split[4] + text_split[3][0] + text_split[3][1] + '01.html'
 		if count > 5:
 			url = 'https://www.basketball-reference.com/players/'+text_split[4][0] + '/' + text_split[4][0] + text_split[4][1] + text_split[4][2] + text_split[4][3] + text_split[4][4] + text_split[3][0] + text_split[3][1] + '01.html'
 		
