@@ -9,7 +9,7 @@ def run(data, bot_info, send):
 		return True
 	
 	#NCAA Players
-	if '@sports-bot' in message and 'career' in message and 'ncaa' in message:
+	if '@sports-bot ncaa career' in message:
 		text_split = message.split(' ')
 		
 		url = 'https://www.sports-reference.com/cbb/players/' +text_split[2] + '-' +text_split[3] +'-1.html'
@@ -44,7 +44,7 @@ def run(data, bot_info, send):
 	
 	
 	#NBA Players
-	if '@sports-bot' in message and 'career' in message and 'nba' in message:
+	if '@sports-bot nba career' in message:
 		text_split = message.split(' ')
 		
 		url = 'https://www.basketball-reference.com/players/'+text_split[4][0] + '/' + text_split[4][0] + text_split[4][1] + text_split[4][2] + text_split[4][3] + text_split[4][4] + text_split[3][0] + text_split[3][1] + '01.html'
