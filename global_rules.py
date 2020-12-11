@@ -30,7 +30,7 @@ def run(data, bot_info, send):
 		
 		for i in range(0, games):
 			if game_stats[i][0] == 'Career':
-				career_stats = '{0} Stats\nGames {1}\n{2} MPG\n{9} PPG\n{3} FG%\n{4} FT%\n{5} RPG\n{6} APG\n{7} SPG\n{8} BPG'.format(game_stats[i][0], game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i)][8], game_stats[i][9])
+				career_stats = '{0} Stats\nGames {1}\n{2} MPG\n{9} PPG\n{3} FG%\n{4} FT%\n{5} RPG\n{6} APG\n{7} SPG\n{8} BPG'.format(game_stats[i][0], game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9])
 				send(career_stats, bot_info[0])
 		return True
 
