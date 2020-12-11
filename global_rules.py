@@ -8,6 +8,7 @@ def run(data, bot_info, send):
 		send("yes master", bot_info[0])
 		return True
 	
+	#NCAA Players
 	if '@sports-bot' in message and 'career' in message and 'ncaa' in message:
 		text_split = message.split(' ')
 		
@@ -42,7 +43,7 @@ def run(data, bot_info, send):
 		return True
 	
 	
-	
+	#NBA Players
 	if '@sports-bot' in message and 'career' in message and 'nba' in message:
 		text_split = message.split(' ')
 		
