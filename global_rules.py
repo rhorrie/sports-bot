@@ -12,7 +12,7 @@ def run(data, bot_info, send):
 	if '@sports-bot ncaa career' in message:
 		text_split = message.split(' ')
 		
-		url = 'https://www.sports-reference.com/cbb/players/' +text_split[2] + '-' +text_split[3] +'-1.html'
+		url = 'https://www.sports-reference.com/cbb/players/' +text_split[3] + '-' +text_split[4] +'-1.html'
 		page = requests.get(url)
 		soup = BeautifulSoup(page.content, 'html.parser')
 		send('yes', bot_info[0])
