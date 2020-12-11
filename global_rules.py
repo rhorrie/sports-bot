@@ -15,7 +15,7 @@ def run(data, bot_info, send):
 		page = requests.get(url)
 		soup = BeautifulSoup(page.content, 'html.parser')
 
-		stats = soup.findAll(attrs={'data-stat': ['season', 'g', 'mp_per_g', 'fg_pct', 'ft_pct', 'trb_per_g', 'ast_per_g', 'stl_per_g', 'blk_per_g', 'pts_per_g']})
+		stats = soup.findAll(attrs={'data-stat': ['season', 'school_name', 'g', 'mp_per_g', 'fg_pct', 'ft_pct', 'trb_per_g', 'ast_per_g', 'stl_per_g', 'blk_per_g', 'pts_per_g']})
 
 		text_stats = []
 
@@ -23,15 +23,22 @@ def run(data, bot_info, send):
 			stat = thing.text
 			text_stats.append(stat)
 
-		game_stats = [text_stats[x:x+10] for x in range (0, len(text_stats), 10)]
+		game_stats = [text_stats[x:x+11] for x in range (0, len(text_stats), 11)]
 
-		games = len(stats) / 10
+		games = len(stats) / 11
 		games = int(games)
 		
+		schools = []
 		for i in range(0, games):
 			if game_stats[i][0] == 'Career':
-				career_stats = '{0} Stats\nGames {1}\n{2} MPG\n{9} PPG\n{3} FG%\n{4} FT%\n{5} RPG\n{6} APG\n{7} SPG\n{8} BPG'.format(game_stats[i][0], game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9])
-				send(career_stats, bot_info[0])
+				if game_stats[i][1] == 'Overall':
+					for f in range(i+1, games):
+						schools.append(game_stats[f][1])
+					career_stats = '{0} Stats\nSchool(s) {1}\nGames {2}\n{3} MPG\n{10} PPG\n{4} FG%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG'.format(game_stats[i][0], schools, game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9])
+					send(career_stats, bot_info[0])
+				if game_stats[i][1] != 'Overall':
+					career_stats = '{0} Stats\nSchool(s) {1}\nGames {2}\n{3} MPG\n{10} PPG\n{4} FG%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG'.format(game_stats[i][0], game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10])
+					send(career_stats, bot_info[0])
 		return True
 
 	return True
