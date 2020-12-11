@@ -28,7 +28,7 @@ def run(data, bot_info, send):
 		games = len(stats) / 11
 		games = int(games)
 		
-		schools = []
+		schools = ''
 		for i in range(0, games):
 			if game_stats[i][0] == 'Career':
 				if game_stats[i][1] == 'Overall':
