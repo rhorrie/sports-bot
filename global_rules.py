@@ -4,11 +4,11 @@ import requests
 def run(data, bot_info, send):
 	message = data['text']
 
-	if message == '@sports-bot*':
+	if message == '.test':
 		send("yes master", bot_info[0])
 		return True
 	
-	if message == 'matt haarms':
+	if '@sports-bot' in message and 'career' in message:
 		url = 'https://www.sports-reference.com/cbb/players/matt-haarms-1/gamelog/2021/'
 		page = requests.get(url)
 		soup = BeautifulSoup(page.content, 'html.parser')
