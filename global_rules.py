@@ -15,7 +15,6 @@ def run(data, bot_info, send):
 		url = 'https://www.sports-reference.com/cbb/players/' +text_split[3] + '-' +text_split[4] +'-1.html'
 		page = requests.get(url)
 		soup = BeautifulSoup(page.content, 'html.parser')
-		send('yes', bot_info[0])
 
 		stats = soup.findAll(attrs={'data-stat': ['season', 'school_name', 'g', 'mp_per_g', 'fg_pct', 'ft_pct', 'trb_per_g', 'ast_per_g', 'stl_per_g', 'blk_per_g', 'pts_per_g']})
 
