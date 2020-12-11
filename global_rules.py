@@ -4,7 +4,7 @@ import requests
 def run(data, bot_info, send):
 	message = data['text']
 
-	if message == 'i am the master':
+	if message == '@sports-bot*':
 		send("yes master", bot_info[0])
 		return True
 	
