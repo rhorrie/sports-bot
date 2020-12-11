@@ -98,7 +98,7 @@ def run(data, bot_info, send):
 		page = requests.get(url)
 		soup = BeautifulSoup(page.content, 'html.parser')
 
-		stats = soup.findAll(attrs={'data-stat': ['G', 'AB', 'R', 'H', '2B', '3B', 'HR', 'RBI', 'SB', 'BB', 'batting_avg', 'onbase_perc', 'slugging_perc']})
+		stats = soup.findAll(attrs={'data-stat': ['player_stats_summary_explain', 'G', 'AB', 'R', 'H', '2B', '3B', 'HR', 'RBI', 'SB', 'BB', 'batting_avg', 'onbase_perc', 'slugging_perc']})
 
 		text_stats = []
 
@@ -111,9 +111,11 @@ def run(data, bot_info, send):
 
 		games = len(stats) / 13
 		games = int(games)
-
-		career_stats = ('{0} Games\n{1} At Bats\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(game_stats[games-2][0], game_stats[games-2][1], game_stats[games-2][2], game_stats[games-2][3], game_stats[games-2][4], game_stats[games-2][5], game_stats[games-2][6], game_stats[games-2][7], game_stats[games-2][8], game_stats[games-2][9], game_stats[games-2][10], game_stats[games-2][11], game_stats[games-2][12]))
-		send(career_stats, bot_info[0])
+		
+		for i in range(0, games):
+			if 'Yrs' in game_stats[i][0]:
+				career_stats = ('{0} Games\n{1} At Bats\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10], game_stats[i][11], game_stats[i][12], game_stats[i+1][0]))
+				send(career_stats, bot_info[0])
 		
 		return True
 	
