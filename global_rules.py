@@ -85,7 +85,7 @@ def run(data, bot_info, send):
 	
 	
 	#MLB Hitters
-	if '@sports-bot mlb career' in message:
+	if '@sports-bot mlb hitting career' in message:
 		
 		text_split = message.split(' ')
 		count = len(text_split[4])
@@ -120,7 +120,7 @@ def run(data, bot_info, send):
 		return True
 	
 	#MLB Pitchers
-	if '@sports-bot mlb career' in message:
+	if '@sports-bot mlb pitching career' in message:
 		
 		text_split = message.split(' ')
 		count = len(text_split[4])
