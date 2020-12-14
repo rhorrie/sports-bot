@@ -88,7 +88,7 @@ def run(data, bot_info, send):
 	if '@sports-bot mlb hitting career' in message:
 		
 		text_split = message.split(' ')
-		count = len(text_split[4])
+		count = len(text_split[5])
 
 		if count <= 5:
 			url = 'https://www.baseball-reference.com/players/'+text_split[5][0] + '/' + text_split[5] + text_split[4][0] + text_split[4][1] + '01.shtml'
@@ -123,7 +123,7 @@ def run(data, bot_info, send):
 	if '@sports-bot mlb pitching career' in message:
 		
 		text_split = message.split(' ')
-		count = len(text_split[4])
+		count = len(text_split[5])
 
 		if count <= 5:
 			url = 'https://www.baseball-reference.com/players/'+text_split[5][0] + '/' + text_split[5] + text_split[4][0] + text_split[4][1] + '01.shtml'
