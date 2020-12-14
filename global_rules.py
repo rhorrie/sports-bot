@@ -114,7 +114,42 @@ def run(data, bot_info, send):
 		
 		for i in range(0, games):
 			if 'Yrs' in game_stats[i][0]:
-				career_stats = ('{0} Games\n{1} At Bats\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10], game_stats[i][11], game_stats[i][12], game_stats[i+1][0]))
+				career_stats = ('Career Stats\n{0} Games\n{1} At Bats\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10], game_stats[i][11], game_stats[i][12], game_stats[i+1][0]))
+				send(career_stats, bot_info[0])
+		
+		return True
+	
+	#MLB Pitchers
+	if '@sports-bot mlb career' in message:
+		
+		text_split = message.split(' ')
+		count = len(text_split[4])
+
+		if count <= 5:
+			url = 'https://www.baseball-reference.com/players/'+text_split[4][0] + '/' + text_split[4] + text_split[3][0] + text_split[3][1] + '01.shtml'
+		if count > 5:
+			url = 'https://www.baseball-reference.com/players/'+text_split[4][0] + '/' + text_split[4][0] + text_split[4][1] + text_split[4][2] + text_split[4][3] + text_split[4][4] + text_split[3][0] + text_split[3][1] + '01.shtml'
+
+		page = requests.get(url)
+		soup = BeautifulSoup(page.content, 'html.parser')
+
+		stats = soup.findAll(attrs={'data-stat': ['player_stats_summary_explain', 'W', 'L', 'earned_run_avg', 'CG', 'SHO', 'IP', 'H', 'ER', 'HR', 'BB', 'SO', 'whip', 'strikeouts_per_nine']})
+
+		text_stats = []
+
+		for thing in stats:
+			stat = thing.text
+			text_stats.append(stat)
+
+
+		game_stats = [text_stats[x:x+13] for x in range (0, len(text_stats), 13)]
+
+		games = len(stats) / 13
+		games = int(games)
+		
+		for i in range(0, games):
+			if 'Yrs' in game_stats[i][0]:
+				career_stats = ('Career Stats:\n{0} Wins\n{1} Losses\n{2} ERA\n{3} CG\n{4} Shut Outs\n{5} IP\n{6} Hits\n{7} Earned Runs\n{8} Home Runs\n{9} Walks\n{10} Strike Outs\n{11} WHIP\n{12} K/9'.format(game_stats[i][1], game_stats[i][2], game_stats[i][3], game_stats[i][4], game_stats[i][5], game_stats[i][6], game_stats[i][7], game_stats[i][8], game_stats[i][9], game_stats[i][10], game_stats[i][11], game_stats[i][12], game_stats[i+1][0]))
 				send(career_stats, bot_info[0])
 		
 		return True
