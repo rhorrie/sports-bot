@@ -154,4 +154,41 @@ def run(data, bot_info, send):
 		
 		return True
 	
+	
+	if '@sports-bot nfl career' in message:
+		
+		text_split = text.split(' ')
+
+		count = len(text_split[4])
+
+		first_name_capital = text_split[3].capitalize()
+		last_name_capital = text_split[4].capitalize()
+
+		if count <= 4:
+			url = 'https://www.pro-football-reference.com/players/'+ last_name_capital[0] + '/' + last_name_capital + first_name_capital[0] + first_name_capital[1] + '00.htm'
+		if count > 4:
+			url = 'https://www.pro-football-reference.com/players/'+ last_name_capital[0] + '/' + last_name_capital[0] + last_name_capital[1] + last_name_capital[2] + last_name_capital[3] + first_name_capital[0] + first_name_capital[1] + '00.htm'
+
+		page = requests.get(url)
+		soup = BeautifulSoup(page.content, 'html.parser')
+
+		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'rush_yds', 'rush_td', 'rush_yds_per_att', 'rush_yds_pef_g', 'rec', 'rec_yds', 'rec_td', 'yds_from_scrimmage', 'rush_receive_td', 'fumbles']})
+
+		text_stats = []
+
+		for thing in stats:
+			stat = thing.text
+			text_stats.append(stat)
+
+		print(text_stats)
+
+
+		for i in range(0, int(len(stats))):
+			if 'Career' in text_stats[i]:
+				if text_stats[0] == 'Yds':
+					career_stats = 'Career:\n{0} Games\n{1} Rushing Yards\n{2} Rushing TDs\n{3} YPA\n{4} YPG\n{5} Receptions\n{6} Receiving Yards\n{7} Receiving TDs\n{8} Scrammage Yards\n{9} Total TDs\n{10} Fumbles'.format(text_stats[i+1], text_stats[i+2], text_stats[i+3], text_stats[i+4], text_stats[i+5], text_stats[i+6], text_stats[i+7], text_stats[i+8], text_stats[i+9], text_stats[i+10])
+					send(career_stats, bot_info[0])
+		return True
+
+	
 	return True
