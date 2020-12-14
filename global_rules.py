@@ -157,7 +157,7 @@ def run(data, bot_info, send):
 	
 	if '@sports-bot nfl career' in message:
 		
-		text_split = text.split(' ')
+		text_split = message.split(' ')
 
 		count = len(text_split[4])
 
