@@ -185,8 +185,12 @@ def run(data, bot_info, send):
 
 		for i in range(0, int(len(stats))):
 			if 'Career' in text_stats[i]:
-				career_stats = 'Career:\n{0} Games\n{1} Rushing Yards\n{2} Rushing TDs\n{3} YPA\n{4} YPG\n{5} Receptions\n{6} Receiving Yards\n{7} Receiving TDs\n{8} Scrammage Yards\n{9} Total TDs\n{10} Fumbles'.format(text_stats[i+1], text_stats[i+2], text_stats[i+3], text_stats[i+4], text_stats[i+5], text_stats[i+6], text_stats[i+7], text_stats[i+8], text_stats[i+9], text_stats[i+10], text_stats[i+11])
-				send(career_stats, bot_info[0])
+				if text_stats[0] == 'Yds':
+					career_stats = 'Career:\n{0} Games\n{1} Rushing Yards\n{2} Rushing TDs\n{3} YPA\n{4} YPG\n{5} Receptions\n{6} Receiving Yards\n{7} Receiving TDs\n{8} Scrammage Yards\n{9} Total TDs\n{10} Fumbles'.format(text_stats[i+1], text_stats[i+2], text_stats[i+3], text_stats[i+4], text_stats[i+5], text_stats[i+6], text_stats[i+7], text_stats[i+8], text_stats[i+9], text_stats[i+10], text_stats[i+11])
+					send(career_stats, bot_info[0])
+				if text_stats[0] == 'Rec':
+					career_stats = 'Career:\n{0} Games\n{1} Receptions\n{2} Receiving Yards\n{3} Receiving TDs\n{4} Rushing Yards\n{5} Rush TDs\n{6} Rush YPA\n{7} Rush YPG\n{8} Scrimmage Yards\n{9} Total TDs\n{10} Fumbles'.format(text_stats[i+1], text_stats[i+2], text_stats[i+3], text_stats[i+4], text_stats[i+5], text_stats[i+6], text_stats[i+7], text_stats[i+8], text_stats[i+9], text_stats[i+10], text_stats[i+11])
+					send(career_stats, bot_info[0])
 		return True
 
 	
