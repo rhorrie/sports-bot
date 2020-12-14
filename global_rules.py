@@ -180,8 +180,6 @@ def run(data, bot_info, send):
 			stat = thing.text
 			text_stats.append(stat)
 
-		print(text_stats)
-
 
 		for i in range(0, int(len(stats))):
 			if 'Career' in text_stats[i]:
