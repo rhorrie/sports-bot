@@ -190,6 +190,39 @@ def run(data, bot_info, send):
 					career_stats = 'Career:\n{0} Games\n{1} Receptions\n{2} Receiving Yards\n{3} Receiving TDs\n{4} Rushing Yards\n{5} Rush TDs\n{6} Rush YPA\n{7} Rush YPG\n{8} Scrimmage Yards\n{9} Total TDs\n{10} Fumbles'.format(text_stats[i+1], text_stats[i+2], text_stats[i+3], text_stats[i+4], text_stats[i+5], text_stats[i+6], text_stats[i+7], text_stats[i+8], text_stats[i+9], text_stats[i+10], text_stats[i+11])
 					send(career_stats, bot_info[0])
 		return True
+	
+	if '@sports-bot nfl passing career' in message:
+		
+		text_split = message.split(' ')
+
+		count = len(text_split[4])
+
+		first_name_capital = text_split[4].capitalize()
+		last_name_capital = text_split[5].capitalize()
+
+		if count <= 4:
+			url = 'https://www.pro-football-reference.com/players/'+ last_name_capital[0] + '/' + last_name_capital + first_name_capital[0] + first_name_capital[1] + '00.htm'
+		if count > 4:
+			url = 'https://www.pro-football-reference.com/players/'+ last_name_capital[0] + '/' + last_name_capital[0] + last_name_capital[1] + last_name_capital[2] + last_name_capital[3] + first_name_capital[0] + first_name_capital[1] + '00.htm'
+
+		page = requests.get(url)
+		soup = BeautifulSoup(page.content, 'html.parser')
+
+		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'pass_cmp', 'pass_att', 'pass_cmp_perc', 'pass_yds', 'pass_td', 'pass_int', 'pass_rating', 'qbr', 'pass_sacked', 'gwd']})
+
+		text_stats = []
+
+		for thing in stats:
+			stat = thing.text
+			text_stats.append(stat)
+
+
+		for i in range(0, int(len(stats))):
+			if 'Career' in text_stats[i]:
+				career_stats = 'Career:\n{0} Games\n{1} Completions\n{2} Attempts\n{3} CMP%\n{4} Pass Yards\n{5} TDs\n{6} INTs\n{7} Passer Rating\n{8} QBR\n{9} Sacks\n{10} Game Winning Drives'.format(text_stats[i+1], text_stats[i+2], text_stats[i+3], text_stats[i+4], text_stats[i+5], text_stats[i+6], text_stats[i+7], text_stats[i+8], text_stats[i+9], text_stats[i+10], text_stats[i+11])
+				send(career_stats, bot_info[0])
+		return True
+
 
 	
 	return True
