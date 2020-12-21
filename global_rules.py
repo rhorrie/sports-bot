@@ -195,7 +195,7 @@ def run(data, bot_info, send):
 		
 		text_split = message.split(' ')
 
-		count = len(text_split[4])
+		count = len(text_split[5])
 
 		first_name_capital = text_split[4].capitalize()
 		last_name_capital = text_split[5].capitalize()
