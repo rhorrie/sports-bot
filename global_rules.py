@@ -77,31 +77,31 @@ def output_stats(season_stats, num_of_seasons, teams, sport):
 		for i in range(0, num_of_seasons):
 			if season_stats[i][0] == 'Career':
 				career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], teams)
-				print(career_stats)
+				send(career_stats, bot_info[0])
 	
 	if 'mlb' in sport:
 		for i in range(0, num_of_seasons):
 			if 'Yrs' in season_stats[i][0]:
 				if sport == 'mlb-batting':
 					career_stats = 'Career Stats\nTeams:{13}\n{0} Games\n{1} At Bats\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], season_stats[i+1][0], teams)
-					print(career_stats)
+					send(career_stats, bot_info[0])
 				if sport == 'mlb-pitching':
 					career_stats = 'Career Stats\nTeams:{13}\n{0} Wins\n{1} Losses\n{2} ERA\n{3} CG\n{4} Shut Outs\n{5} IP\n{6} Hits\n{7} Earned Runs\n{8} Home Runs\n{9} Walks\n{10} Strike Outs\n{11} WHIP\n{12} K/9'.format(season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], season_stats[i+1][0], teams)
-					print(career_stats)
+					send(career_stats, bot_info[0])
 
 	if 'nfl' in sport:
 		for i in range(0, len(season_stats)):
 			if 'Career' in season_stats[i]:
 				if sport == 'nfl-passing':
 					career_stats = 'Career Stats\nTeams:{12}\n{0} Games\n{1} Record as Starter\n{2} Completions\n{3} Attempts\n{4} CMP%\n{5} Pass Yards\n{6} TDs\n{7} INTs\n{8} Passer Rating\n{9} QBR\n{10} Sacks\n{11} Game Winning Drives'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], season_stats[i+12], teams)
-					print(career_stats)
+					send(career_stats, bot_info[0])
 				if sport == 'nfl-skill':
 					if season_stats[0] == 'Yds' or season_stats[2] == 'Yds':
 						career_stats = 'Career Stats\nTeams:{11}\n{0} Games\n{1} Rushing Yards\n{2} Rushing TDs\n{3} YPA\n{4} YPG\n{5} Receptions\n{6} Receiving Yards\n{7} Receiving TDs\n{8} Scrammage Yards\n{9} Total TDs\n{10} Fumbles'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], teams)
-						print(career_stats)
+						send(career_stats, bot_info[0])
 					if season_stats[0] == 'Rec' or season_stats[2] == 'Rec':
 						career_stats = 'Career Stats\nTeams:{11}\n{0} Games\n{1} Receptions\n{2} Receiving Yards\n{3} Receiving TDs\n{4} Rushing Yards\n{5} Rush TDs\n{6} Rush YPA\n{7} Rush YPG\n{8} Scrimmage Yards\n{9} Total TDs\n{10} Fumbles'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], teams)
-						print(career_stats)
+						send(career_stats, bot_info[0])
 
 	return season_stats
 
