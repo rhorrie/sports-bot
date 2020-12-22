@@ -125,7 +125,7 @@ def run(data, bot_info, send):
 	
 	season_stats = '1'
 	count = 0
-	user_message = '@sports-bot nfl-passing career tom brady'
+	user_message = message
 	user_message_array = user_message.split(' ')
 	if user_message_array[1] == 'nba' or user_message_array[1] == 'mlb':
 		count = 1
