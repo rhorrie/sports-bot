@@ -73,6 +73,8 @@ def get_stats(url, sport):
 	return season_stats, seasons, teams
 
 def output_stats(season_stats, num_of_seasons, teams, sport):
+	career_stats = ''
+	
 	if sport == 'ncaa' or sport == 'nba':
 		for i in range(0, num_of_seasons):
 			if season_stats[i][0] == 'Career':
@@ -103,7 +105,7 @@ def output_stats(season_stats, num_of_seasons, teams, sport):
 						career_stats = 'Career Stats\nTeams:{11}\n{0} Games\n{1} Receptions\n{2} Receiving Yards\n{3} Receiving TDs\n{4} Rushing Yards\n{5} Rush TDs\n{6} Rush YPA\n{7} Rush YPG\n{8} Scrimmage Yards\n{9} Total TDs\n{10} Fumbles'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], teams)
 						
 
-	return season_stats
+	return career_stats
 
 def get_teams(teams):
 	total_teams = ''
