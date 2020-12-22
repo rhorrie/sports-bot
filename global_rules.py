@@ -123,17 +123,18 @@ def run(data, bot_info, send):
 		send("yes master", bot_info[0])
 		return True
 	
-	season_stats = '1'
-	count = 0
-	user_message = message
-	user_message_array = user_message.split(' ')
-	if user_message_array[1] == 'nba' or user_message_array[1] == 'mlb':
-		count = 1
-	while season_stats != '':
-		url = get_url(user_message_array, count)
-		season_info = get_stats(url, user_message_array[1])
-		career_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
-		send(career_stats, bot_info[0])
-		count += 1
+	if '@sports-bot' in message:
+		season_stats = '1'
+		count = 0
+		user_message = message
+		user_message_array = user_message.split(' ')
+		if user_message_array[1] == 'nba' or user_message_array[1] == 'mlb':
+			count = 1
+		while season_stats != '':
+			url = get_url(user_message_array, count)
+			season_info = get_stats(url, user_message_array[1])
+			career_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
+			send(career_stats, bot_info[0])
+			count += 1
 	
 	return True
