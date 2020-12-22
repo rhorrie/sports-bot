@@ -130,7 +130,7 @@ def run(data, bot_info, send):
 		user_message_array = user_message.split(' ')
 		if user_message_array[1] == 'nba' or user_message_array[1] == 'mlb':
 			count = 1
-		while career_stats != '':
+		while career_stats:
 			url = get_url(user_message_array, count)
 			season_info = get_stats(url, user_message_array[1])
 			career_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
