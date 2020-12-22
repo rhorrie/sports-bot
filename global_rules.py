@@ -132,7 +132,7 @@ def run(data, bot_info, send):
 	while season_stats != '':
 		url = get_url(user_message_array, count)
 		season_info = get_stats(url, user_message_array[1])
-		season_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
+		career_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
 		send(career_stats, bot_info[0])
 		count += 1
 	
