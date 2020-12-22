@@ -127,16 +127,21 @@ def run(data, bot_info, send):
 	
 	if '@sports-bot' in message:
 		career_stats = '1'
+		name = ' '
 		count = 0
 		user_message = message
 		user_message_array = user_message.split(' ')
-		if user_message_array[1] == 'nba' or user_message_array[1] == 'mlb':
+		if 'nba' in user_message_array[1] or 'mlb' in user_message_array[1]:
 			count = 1
-		while career_stats:
+		while name:
 			url = get_url(user_message_array, count)
+			page = requests.get(url)
+			soup = BeautifulSoup(page.content, 'html.parser')
+			name = soup.find("h1", {'itemprop': 'name'})
 			season_info = get_stats(url, user_message_array[1])
 			career_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
-			send(career_stats, bot_info[0])
+			if career_stats != '':
+				send(career_stats, bot_info[0])
 			count += 1
 	
 	return True
