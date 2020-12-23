@@ -68,7 +68,7 @@ def get_stats(url, sport):
 		stat = thing.text
 		text_stats.append(stat)
 	
-	if 'nfl' in sport:
+	if 'nfl' in sport or 'nba' in sport:
 		return text_stats, seasons, teams
 	
 	season_stats = [text_stats[x:x+13] for x in range (0, len(text_stats), 13)]
@@ -79,7 +79,7 @@ def get_stats(url, sport):
 def format_stats(season_stats, num_of_seasons, teams, sport):
 	career_stats = ''
 	
-	if sport == 'ncaa' or sport == 'nba':
+	if sport == 'ncaa':
 		for i in range(0, num_of_seasons):
 			if season_stats[i][0] == 'Career':
 				career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], teams)
@@ -95,9 +95,11 @@ def format_stats(season_stats, num_of_seasons, teams, sport):
 					career_stats = 'Career Stats\nTeams:{13}\n{0} Wins\n{1} Losses\n{2} ERA\n{3} CG\n{4} Shut Outs\n{5} IP\n{6} Hits\n{7} Earned Runs\n{8} Home Runs\n{9} Walks\n{10} Strike Outs\n{11} WHIP\n{12} K/9'.format(season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], season_stats[i+1][0], teams)
 					
 
-	if 'nfl' in sport:
+	if 'nfl' in sport or 'nba' in sport:
 		for i in range(0, len(season_stats)):
 			if 'Career' in season_stats[i]:
+				if sport == 'nba':
+					career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i], season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], season_stats[i+12], teams)
 				if sport == 'nfl-passing':
 					career_stats = 'Career Stats\nTeams:{12}\n{0} Games\n{1} Record as Starter\n{2} Completions\n{3} Attempts\n{4} CMP%\n{5} Pass Yards\n{6} TDs\n{7} INTs\n{8} Passer Rating\n{9} QBR\n{10} Sacks\n{11} Game Winning Drives'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], season_stats[i+12], teams)
 					
