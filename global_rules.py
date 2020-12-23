@@ -17,7 +17,7 @@ def get_url(user_message_array, count):
 		return url
 
 	if 'ncaa' in user_message_array[1]:
-		url = 'https://www.sports-reference.com/cbb/players/' + user_message_array[3] + '-' +user_message_array[4] +'-1.html'
+		url = 'https://www.sports-reference.com/cbb/players/' + user_message_array[3] + '-' +user_message_array[4] +'-' + str(count) + '.html'
 		return url
 	if 'nfl' in user_message_array[1]:
 		first_name_capital = user_message_array[3].capitalize()
@@ -58,7 +58,11 @@ def get_stats(url, sport):
 		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'qb_rec', 'pass_cmp', 'pass_att', 'pass_cmp_perc', 'pass_yds', 'pass_td', 'pass_int', 'pass_rating', 'qbr', 'pass_sacked', 'gwd']})							#13
 		teams = soup.findAll(attrs={'data-stat': 'team'})
 		teams = get_teams(teams)
-
+	
+	name = soup.find('h1', {'itemprop': 'name'}
+	if not name:
+		return 0
+	
 	text_stats = []
 	for thing in stats:
 		stat = thing.text
@@ -72,7 +76,7 @@ def get_stats(url, sport):
 
 	return season_stats, seasons, teams
 
-def output_stats(season_stats, num_of_seasons, teams, sport):
+def format_stats(season_stats, num_of_seasons, teams, sport):
 	career_stats = ''
 	
 	if sport == 'ncaa' or sport == 'nba':
@@ -126,22 +130,18 @@ def run(data, bot_info, send):
 		return True
 	
 	if '@sports-bot' in message:
-		career_stats = '1'
-		name = ' '
 		count = 0
 		user_message = message
 		user_message_array = user_message.split(' ')
-		if 'nba' in user_message_array[1] or 'mlb' in user_message_array[1]:
+		if 'nba' in user_message_array[1] or 'mlb' in user_message_array[1] or 'ncaa' in user_message_array[1]:
 			count = 1
-		while name:
+		while True:
 			url = get_url(user_message_array, count)
-			page = requests.get(url)
-			soup = BeautifulSoup(page.content, 'html.parser')
-			name = soup.find("h1", {'itemprop': 'name'})
 			season_info = get_stats(url, user_message_array[1])
-			career_stats = output_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
-			if career_stats != '':
-				send(career_stats, bot_info[0])
+			if season_info == 0:
+				break
+			career_stats = format_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
+			send(career_stats, bot_info[0])
 			count += 1
 	
 	return True
