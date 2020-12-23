@@ -58,8 +58,8 @@ def get_stats(url, sport):
 		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'qb_rec', 'pass_cmp', 'pass_att', 'pass_cmp_perc', 'pass_yds', 'pass_td', 'pass_int', 'pass_rating', 'qbr', 'pass_sacked', 'gwd']})							#13
 		teams = soup.findAll(attrs={'data-stat': 'team'})
 		teams = get_teams(teams)
-	
-	name = soup.find('h1', {'itemprop': 'name'}
+		
+	name = soup.find('h1', {'itemprop': 'name'})
 	if not name:
 		return 0
 	
