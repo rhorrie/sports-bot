@@ -32,97 +32,123 @@ def get_stats(url, sport):
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content, 'html.parser')
 
-	stats = []
+	num_of_stats = 13
+
 	seasons = ''
-	if sport == 'ncaa':
+	if sport == 'ncaa-basketball':
 		stats = soup.findAll(attrs={'data-stat': ['season', 'g', 'mp_per_g', 'fg_pct', 'fg3_pct', 'ft_pct', 'trb_per_g', 'ast_per_g', 'stl_per_g', 'blk_per_g', 'tov_per_g', 'pf_per_g', 'pts_per_g']})		#13
 		teams = soup.findAll(attrs={'data-stat': 'school_name'})
-		teams = get_teams(teams)
 	if sport == 'nba':
 		stats = soup.findAll(attrs={'data-stat': ['season', 'g', 'mp_per_g', 'fg_pct', 'fg3_pct', 'ft_pct', 'trb_per_g', 'ast_per_g', 'stl_per_g', 'blk_per_g', 'tov_per_g', 'pf_per_g', 'pts_per_g']})			#13
 		teams = soup.findAll(attrs={'data-stat': 'team_id'})
-		teams = get_teams(teams)
 	if sport == 'mlb-pitching':
-		stats = soup.findAll(attrs={'data-stat': ['player_stats_summary_explain', 'W', 'L', 'earned_run_avg', 'CG', 'SHO', 'IP', 'H', 'ER', 'HR', 'BB', 'SO', 'whip', 'strikeouts_per_nine']})    #13
+		stats = soup.findAll(attrs={'data-stat': ['year_ID', 'player_stats_summary_explain', 'W', 'L', 'earned_run_avg', 'CG', 'SHO', 'IP', 'H', 'ER', 'HR', 'BB', 'SO', 'strikeouts_per_nine']})    #13
 		teams = soup.findAll(attrs={'data-stat': 'team_ID'})
-		teams = get_teams(teams)
 	if sport == 'mlb-batting':
-		stats = soup.findAll(attrs={'data-stat': ['player_stats_summary_explain', 'G', 'AB', 'R', 'H', '2B', '3B', 'HR', 'RBI', 'SB', 'BB', 'batting_avg', 'onbase_perc', 'slugging_perc']})
+		stats = soup.findAll(attrs={'data-stat': ['year_ID', 'player_stats_summary_explain', 'G', 'R', 'H', '2B', '3B', 'HR', 'RBI', 'SB', 'BB', 'batting_avg', 'onbase_perc', 'slugging_perc']})
 		teams = soup.findAll(attrs={'data-stat': 'team_ID'})
-		teams = get_teams(teams)
 	if sport == 'nfl-skill':
 		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'rush_yds', 'rush_td', 'rush_yds_per_att', 'rush_yds_per_g', 'rec', 'rec_yds', 'rec_td', 'yds_from_scrimmage', 'rush_receive_td', 'fumbles']})	#13
 		teams = soup.findAll(attrs={'data-stat': 'team'})
-		teams = get_teams(teams)
+		num_of_stats = 12
 	if sport == 'nfl-passing':
 		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'qb_rec', 'pass_cmp', 'pass_att', 'pass_cmp_perc', 'pass_yds', 'pass_td', 'pass_int', 'pass_rating', 'qbr', 'pass_sacked', 'gwd']})							#13
 		teams = soup.findAll(attrs={'data-stat': 'team'})
-		teams = get_teams(teams)
-		
-	name = soup.find('h1', {'itemprop': 'name'})
+
+	name = soup.find("h1", {'itemprop': 'name'})
 	if not name:
 		return 0
+
+	seasons = len(stats) / num_of_stats
+
+
+	text_stats = get_text_stats(stats, num_of_stats, sport)
 	
+	return text_stats, seasons, teams
+
+def format_stats(season_stats, num_of_seasons, teams, sport, season_or_career):
+	career_stats = ''
+	season_or_career = season_or_career.upper()
+
+	for i in range(0, int(num_of_seasons)):
+		if season_or_career == 'CAREER':
+			if 'mlb' in sport:	
+				season_or_career = 'Yrs'
+		player_teams = get_teams(teams, season_or_career, season_stats, num_of_seasons)
+		if season_or_career in season_stats[i][0].upper():
+			if sport == 'mlb-pitching':
+				career_stats = '{0} Stats\nTeams:{13}\n{1} Wins\n{2} Losses\n{3} ERA\n{4} CG\n{5} Shut Outs\n{6} IP\n{7} Hits\n{8} Earned Runs\n{9} Home Runs\n{10} Walks\n{11} Strike Outs\n{12} K/9'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], player_teams)
+			if sport == 'mlb-batting':
+				career_stats = '{0} Stats\nTeams:{13}\n{1} Games\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], player_teams)
+			if sport == 'ncaa-basketball':
+				career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], player_teams)
+			if sport == 'nba':
+				career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], player_teams)
+			if sport == 'nfl-passing':
+				career_stats = '{0} Stats\nTeams: {13}\n{1} Games\n{2} Record as Starter\n{1} Completions\n{4} Attempts\n{5} CMP%\n{6} Pass Yards\n{7} TDs\n{8} INTs\n{9} Passer Rating\n{10} QBR\n{11} Sacks\n{12} Game Winning Drives'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], player_teams)
+			if sport == 'nfl-skill':
+				if season_stats[0][2] == 'Yds':
+					career_stats = '{0} Stats\nTeams: {12}\n{1} Games\n{2} Rushing Yards\n{3} Rushing TDs\n{4} YPA\n{5} YPG\n{6} Receptions\n{7} Receiving Yards\n{8} Receiving TDs\n{9} Scrammage Yards\n{10} Total TDs\n{11} Fumbles'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], player_teams)
+				if season_stats[0][2] == 'Rec':
+					career_stats = '{0} Stats\nTeams: {12}\n{1} Games\n{2} Receptions\n{3} Receiving Yards\n{4} Receiving TDs\n{5} Rushing Yards\n{6} Rush TDs\n{7} Rush YPA\n{8} Rush YPG\n{9} Scrimmage Yards\n{10} Total TDs\n{11} Fumbles'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], player_teams)
+
+
+
+			return career_stats
+
+
+def get_teams(teams, season_or_career, season_stats, num_of_seasons):
+	total_teams = []
+	for team in teams:
+		add = team.text
+		total_teams.append(add)
+	
+	career_teams = ''
+	if 'CAREER' in season_or_career or 'Yrs' in season_or_career:
+		for i in range(0, len(total_teams)):
+			add = str(total_teams[i])
+			if add not in career_teams:
+				career_teams +=  add + ' '
+		career_teams = career_teams.replace('Tm', '').replace('School', '').replace('-min', '')
+		return career_teams
+
+	for i in range(0, int(num_of_seasons)):
+		if season_or_career in season_stats[i][0]:
+			career_teams = total_teams[i]
+			return career_teams
+
+
+def get_text_stats(stats, num_of_stats, sport):
 	text_stats = []
 	for thing in stats:
 		stat = thing.text
 		text_stats.append(stat)
-	
-	if 'nfl' in sport or 'nba' in sport:
-		return text_stats, seasons, teams
-	
-	season_stats = [text_stats[x:x+13] for x in range (0, len(text_stats), 13)]
-	seasons = int(len(text_stats) / 13)
 
-	return season_stats, seasons, teams
+	if sport == 'nba' and text_stats[1] != 'G':
+		count = 0
+		season_count = 0
+		for i in range(0, len(text_stats)):
+			if text_stats[i] == 'Season':
+				season_count += 1
+			if season_count == 2:
+				break
+			if season_count < 2:
+				count += 1
+		text_stats = text_stats[count:]
 
-def format_stats(season_stats, num_of_seasons, teams, sport):
-	career_stats = ''
-	
-	if sport == 'ncaa':
-		for i in range(0, num_of_seasons):
-			if season_stats[i][0] == 'Career':
-				career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], teams)
-				
-	
-	if 'mlb' in sport:
-		for i in range(0, num_of_seasons):
-			if 'Yrs' in season_stats[i][0]:
-				if sport == 'mlb-batting':
-					career_stats = 'Career Stats\nTeams:{13}\n{0} Games\n{1} At Bats\n{2} Runs\n{3} Hits\n{4} Doubles\n{5} Triples\n{6} Home Runs\n{7} RBIs\n{8} Steals\n{9} Walks\n{10} AVG\n{11} OBP\n{12} SLUG'.format(season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], season_stats[i+1][0], teams)
-					
-				if sport == 'mlb-pitching':
-					career_stats = 'Career Stats\nTeams:{13}\n{0} Wins\n{1} Losses\n{2} ERA\n{3} CG\n{4} Shut Outs\n{5} IP\n{6} Hits\n{7} Earned Runs\n{8} Home Runs\n{9} Walks\n{10} Strike Outs\n{11} WHIP\n{12} K/9'.format(season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], season_stats[i][12], season_stats[i+1][0], teams)
-					
+	if 'nfl' in sport:
+		count = 0
+		for i in range(0, len(text_stats)):
+			if text_stats[i] != 'Year':
+				count += 1
+			if text_stats[i] == 'Year':
+				break
+		text_stats = text_stats[count:]
 
-	if 'nfl' in sport or 'nba' in sport:
-		for i in range(0, len(season_stats)):
-			if 'Career' in season_stats[i]:
-				if sport == 'nba':
-					career_stats = '{0} Stats\nTeams:{13}\nGames {1}\n{2} MPG\n{12} PPG\n{3} FG%\n{4} 3PT%\n{5} FT%\n{6} RPG\n{7} APG\n{8} SPG\n{9} BPG\n{10} TO\n{11} PF'.format(season_stats[i], season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], season_stats[i+12], teams)
-				if sport == 'nfl-passing':
-					career_stats = 'Career Stats\nTeams:{12}\n{0} Games\n{1} Record as Starter\n{2} Completions\n{3} Attempts\n{4} CMP%\n{5} Pass Yards\n{6} TDs\n{7} INTs\n{8} Passer Rating\n{9} QBR\n{10} Sacks\n{11} Game Winning Drives'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], season_stats[i+12], teams)
-					
-				if sport == 'nfl-skill':
-					if season_stats[0] == 'Yds' or season_stats[2] == 'Yds':
-						career_stats = 'Career Stats\nTeams:{11}\n{0} Games\n{1} Rushing Yards\n{2} Rushing TDs\n{3} YPA\n{4} YPG\n{5} Receptions\n{6} Receiving Yards\n{7} Receiving TDs\n{8} Scrammage Yards\n{9} Total TDs\n{10} Fumbles'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], teams)
-						
-					if season_stats[0] == 'Rec' or season_stats[2] == 'Rec':
-						career_stats = 'Career Stats\nTeams:{11}\n{0} Games\n{1} Receptions\n{2} Receiving Yards\n{3} Receiving TDs\n{4} Rushing Yards\n{5} Rush TDs\n{6} Rush YPA\n{7} Rush YPG\n{8} Scrimmage Yards\n{9} Total TDs\n{10} Fumbles'.format(season_stats[i+1], season_stats[i+2], season_stats[i+3], season_stats[i+4], season_stats[i+5], season_stats[i+6], season_stats[i+7], season_stats[i+8], season_stats[i+9], season_stats[i+10], season_stats[i+11], teams)
-						
 
-	return career_stats
+	game_stats = [text_stats[x:x+num_of_stats] for x in range (0, len(text_stats), num_of_stats)]
+	return game_stats
 
-def get_teams(teams):
-	total_teams = ''
-	for team in teams:
-		add = team.text
-		if add not in total_teams:
-			total_teams += add + ' '
-	total_teams = total_teams.replace('Tm', '')
-	total_teams = total_teams.replace('School', '')
-	total_teams = total_teams.replace('-min', '')
-	return total_teams
 
 def run(data, bot_info, send):
 	message = data['text']
@@ -142,7 +168,7 @@ def run(data, bot_info, send):
 			season_info = get_stats(url, user_message_array[1])
 			if season_info == 0:
 				break
-			career_stats = format_stats(season_info[0], season_info[1], season_info[2], user_message_array[1])
+			career_stats = format_stats(season_info[0], season_info[1], season_info[2], user_message_array[1], user_message_array[2])
 			send(career_stats, bot_info[0])
 			count += 1
 	
