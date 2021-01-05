@@ -8,16 +8,17 @@ def get_url(user_message_array, count):
 		if len(user_message_array[4]) > 5:
 			url = 'https://www.basketball-reference.com/players/'+user_message_array[4][0] + '/' + user_message_array[4][0] + user_message_array[4][1] + user_message_array[4][2] + user_message_array[4][3] + user_message_array[4][4] + user_message_array[3][0] + user_message_array[3][1] + '0' + str(count) + '.html'
 		return url
-
 	if 'mlb' in user_message_array[1]:	
 		if len(user_message_array[4]) <= 5:
 			url = 'https://www.baseball-reference.com/players/'+user_message_array[4][0] + '/' + user_message_array[4] + user_message_array[3][0] + user_message_array[3][1] + '0' + str(count) + '.shtml'
 		if len(user_message_array[4]) > 5:
 			url = 'https://www.baseball-reference.com/players/'+user_message_array[4][0] + '/' + user_message_array[4][0] + user_message_array[4][1] + user_message_array[4][2] + user_message_array[4][3] + user_message_array[4][4] + user_message_array[3][0] + user_message_array[3][1] + '0' + str(count) + '.shtml'
 		return url
-
-	if 'ncaa' in user_message_array[1]:
-		url = 'https://www.sports-reference.com/cbb/players/' + user_message_array[3] + '-' +user_message_array[4] +'-' + str(count) + '.html'
+	if 'ncaa-basketball' in user_message_array[1]:
+		url = 'https://www.sports-reference.com/cbb/players/' + user_message_array[3] + '-' + user_message_array[4] + '-' + str(count) + '.html'
+		return url
+	if 'ncaaf' in user_message_array[1]:
+		url = 'https://www.sports-reference.com/cfb/players/' + user_message_array[3] + '-' + user_message_array[4] + '-' + str(count) + '.html'
 		return url
 	if 'nfl' in user_message_array[1]:
 		first_name_capital = user_message_array[3].capitalize()
@@ -54,6 +55,14 @@ def get_stats(url, sport):
 	if sport == 'nfl-passing':
 		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'qb_rec', 'pass_cmp', 'pass_att', 'pass_cmp_perc', 'pass_yds', 'pass_td', 'pass_int', 'pass_rating', 'qbr', 'pass_sacked', 'gwd']})							#13
 		teams = soup.findAll(attrs={'data-stat': 'team'})
+	if sport == 'ncaaf-passing':
+		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'pass_cmp', 'pass_att', 'pass_cmp_pct', 'pass_yds', 'pass_td', 'pass_int', 'pass_rating']})
+		teams = soup.findAll(attrs={'data-stat': 'school_name'})
+		num_of_stats = 9
+	if sport == 'ncaaf-skill':
+		stats = soup.findAll(attrs={'data-stat': ['year_id', 'g', 'rush_yds', 'rush_td', 'rec', 'rec_yds', 'rec_td', 'scrim_yds', 'scrim_td']})
+		teams = soup.findAll(attrs={'data-stat': 'school_name'})
+		num_of_stats = 9
 
 	name = soup.find("h1", {'itemprop': 'name'})
 	if not name:
@@ -69,6 +78,8 @@ def get_stats(url, sport):
 def format_stats(season_stats, num_of_seasons, teams, sport, season_or_career):
 	career_stats = ''
 	season_or_career = season_or_career.upper()
+
+	print(season_stats)
 
 	for i in range(0, int(num_of_seasons)):
 		if season_or_career == 'CAREER':
@@ -91,8 +102,13 @@ def format_stats(season_stats, num_of_seasons, teams, sport, season_or_career):
 					career_stats = '{0} Stats\nTeams: {12}\n{1} Games\n{2} Rushing Yards\n{3} Rushing TDs\n{4} YPA\n{5} YPG\n{6} Receptions\n{7} Receiving Yards\n{8} Receiving TDs\n{9} Scrammage Yards\n{10} Total TDs\n{11} Fumbles'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], player_teams)
 				if season_stats[0][2] == 'Rec':
 					career_stats = '{0} Stats\nTeams: {12}\n{1} Games\n{2} Receptions\n{3} Receiving Yards\n{4} Receiving TDs\n{5} Rushing Yards\n{6} Rush TDs\n{7} Rush YPA\n{8} Rush YPG\n{9} Scrimmage Yards\n{10} Total TDs\n{11} Fumbles'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], season_stats[i][9], season_stats[i][10], season_stats[i][11], player_teams)
-
-
+			if sport == 'ncaaf-passing':
+				career_stats = '{0} Stats\n Teams: {9}\n{1} Games\n{2} Completions\n{3} Attempts\n{4} CMP%\n{5} Pass Yards\n{6} TDs\n{7} INTs\n{8} Rating'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], player_teams)
+			if sport == 'ncaaf-skill':
+				if season_stats[0][2] == 'Yds':
+					career_stats = '{0} Stats\nTeams: {9}\n{1} Games\n{2} Rush Yards\n{3} Rush TDs\n{4} Receptions\n{5} Receving Yards\n{6} Receiving TDs\n{7} Scrimmage Yards\n{8} Total TDs'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], player_teams)
+				if season_stats[0][2] == 'Rec':
+					career_stats = '{0} Stats\nTeams: {9}\n{1} Games\n{2} Receptions\n{3} Receiving Yards\n{4} Receiving TDs\n{5} Rushing Yards\n{6} Rush TDs\n{7} Scrimmage Yards\n{8} Total TDs'.format(season_stats[i][0], season_stats[i][1], season_stats[i][2], season_stats[i][3], season_stats[i][4], season_stats[i][5], season_stats[i][6], season_stats[i][7], season_stats[i][8], player_teams)
 
 			return career_stats
 
@@ -109,7 +125,7 @@ def get_teams(teams, season_or_career, season_stats, num_of_seasons):
 			add = str(total_teams[i])
 			if add not in career_teams:
 				career_teams +=  add + ' '
-		career_teams = career_teams.replace('Tm', '').replace('School', '').replace('-min', '')
+		career_teams = career_teams.replace('Tm', '').replace('School', '').replace('-min', '').replace('Overall', '')
 		return career_teams
 
 	for i in range(0, int(num_of_seasons)):
