@@ -84,7 +84,7 @@ def format_stats(season_stats, num_of_seasons, teams, sport, season_or_career):
 	for i in range(0, int(num_of_seasons)):
 		if season_or_career == 'CAREER':
 			if 'mlb' in sport:	
-				season_or_career = 'Yrs'
+				season_or_career = 'YRS'
 		player_teams = get_teams(teams, season_or_career, season_stats, num_of_seasons)
 		if season_or_career in season_stats[i][0].upper():
 			if sport == 'mlb-pitching':
